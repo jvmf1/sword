@@ -3,6 +3,8 @@
 #include <string.h>
 #include <stdbool.h>
 
+#define assert(x) if(!(x)) {fprintf(stderr, "could not assert on line %d file %s\n", __LINE__, __FILE__); exit(EXIT_FAILURE);}
+
 void usage() {
 	fprintf(stderr, "usage: sword [flags] <word>, tries to find similar words in a file\n");
 	fprintf(stderr, "\t-d <number>, sets minimum word distance. 3 by default\n");
@@ -11,7 +13,7 @@ void usage() {
 	fprintf(stderr, "\t-c <delimeter>, char delimeter in file. '\\n' by default\n");
 	fprintf(stderr, "\t-i, case insensitive\n");
 	fprintf(stderr, "\t-r, get text from stdin\n");
-	exit(1);
+	exit(EXIT_SUCCESS);
 }
 
 bool is_diagonal(size_t i, size_t j, size_t len, size_t len2) {
@@ -79,8 +81,7 @@ size_t levenshtein_distance(sl_str *str, sl_str * str2, size_t max){
 int main(int argc, char **argv) {
 
 	sl_str *path = sl_str_create("/usr/local/share/dict/words.txt");
-	if (path == NULL)
-		return -1;
+	assert(path);
 
 	unsigned long int minimum = 3;
 	bool casesensitive = true;
@@ -92,12 +93,12 @@ int main(int argc, char **argv) {
 		if (strcmp("-d", argv[i]) == 0) {
 			if (argc <= i+1) {
 				fprintf(stderr, "missing -d <number>\n");
-				return -1;
+				return EXIT_FAILURE;
 			}
 			minimum=atol(argv[i+1]);
 			if (minimum == 0) {
 				fprintf(stderr, "-d '%s' is invalid\n", argv[i+1]);
-				return -1;
+				return EXIT_FAILURE;
 			}
 			i++;
 			continue;
@@ -105,21 +106,20 @@ int main(int argc, char **argv) {
 		if (strcmp("-p", argv[i]) == 0) {
 			if (argc<= i+ 1) {
 				fprintf(stderr, "missing -p <path>\n");
-				return -1;
+				return EXIT_FAILURE;
 			}
-			if (sl_str_set(path, argv[i+1]) != 0)
-				return -1;
+			assert(!sl_str_set(path, argv[i+1]));
 			i++;
 			continue;
 		}
 		if (strcmp("-c", argv[i]) == 0) {
 			if (argc <= i+1) {
 				fprintf(stderr, "missing -c <char>\n");
-				return -1;
+				return EXIT_FAILURE;
 			}
 			if (strlen(argv[i+1]) != 1) {
 				fprintf(stderr, "-c '%s' is invalid\n", argv[i+1]);
-				return -1;
+				return EXIT_FAILURE;
 			}
 			delim = argv[i+1][0];
 			i++;
@@ -141,8 +141,7 @@ int main(int argc, char **argv) {
 	}
 
 	sl_str *word = sl_str_create_cap(32);
-	if (word == NULL)
-		return -1;
+	assert(word);
 	
 	if (strindex == -1 && sl_str_fgetsx2(word, stdin, EOF, 32) == 0 && usestdin == false) {
 		// if there is no word in argv
@@ -151,17 +150,17 @@ int main(int argc, char **argv) {
 		if (word->len == 0) {
 			// if sdin is empty
 			fprintf(stderr, "empty stdin\n");
-			return -1;
+			return EXIT_FAILURE;
 		}
 	}
 
 	if (strindex != -1)
 		// if there is word in argv, overwrite stdin
-		sl_str_set(word, argv[strindex]);
+		assert(!sl_str_set(word, argv[strindex]));
 
 	if (strindex == -1 && usestdin == true) {
 		fprintf(stderr, "no word in args found\n");
-		return -1;
+		return EXIT_FAILURE;
 	}
 
 	if (casesensitive == false)
@@ -175,12 +174,11 @@ int main(int argc, char **argv) {
 
 	if (file == NULL) {
 		fprintf(stderr, "could not open FILE '%s'\n", path->data);
-		return -1;
+		return EXIT_FAILURE;
 	}
 
 	sl_str *w = sl_str_create_cap(32);
-	if (w == NULL)
-		return -1;
+	assert(w);
 
 	int status;
 
@@ -191,9 +189,7 @@ int main(int argc, char **argv) {
 		 * status == 1 : found EOF
 		 * stauts == -1 : failed to malloc */
 
-		if (status == -1)
-			return -1;
-
+		assert(status != -1);
 
 		if (w->len == 0) {
 			if (status == 1)
@@ -223,4 +219,5 @@ int main(int argc, char **argv) {
 	sl_str_free(w);
 	sl_str_free(word);
 	sl_str_free(path);
+	return EXIT_SUCCESS;
 }
