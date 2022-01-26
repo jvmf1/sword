@@ -16,6 +16,8 @@ usage: sword [flags] <word>, tries to find similar words in a file
 	-c <delimeter>, char delimeter in file. '\n' by default
 	-i, case insensitive
 	-r, get text from stdin
+	-a, replaces non alpha numeric chars with spaces
+	-ts, trims consecutive spaces
 ```
 # examples
 ```sh
