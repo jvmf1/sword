@@ -1,4 +1,5 @@
 #include <slib/str.h>
+#include <slib/utils.h>
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
@@ -113,36 +114,31 @@ int main(int argc, char **argv) {
 
 	for (int i = 1; i < argc; i++) {
 		if (strcmp("-d", argv[i]) == 0) {
-			if (argc <= i+1) {
-				fprintf(stderr, "missing -d <number>\n");
-				return EXIT_FAILURE;
-			}
+			if (argc <= i+1)
+				die("missing -d <number>\n");
+
 			minimum=atol(argv[i+1]);
-			if (minimum == 0) {
-				fprintf(stderr, "-d '%s' is invalid\n", argv[i+1]);
-				return EXIT_FAILURE;
-			}
+			if (minimum == 0)
+				die("-d '%s' is invalid\n", argv[i+1]);
+
 			i++;
 			continue;
 		}
 		if (strcmp("-p", argv[i]) == 0) {
-			if (argc<= i+ 1) {
-				fprintf(stderr, "missing -p <path>\n");
-				return EXIT_FAILURE;
-			}
+			if (argc<= i+ 1)
+				die("missing -p <path>\n");
+
 			assert(!sl_str_set(path, argv[i+1]));
 			i++;
 			continue;
 		}
 		if (strcmp("-c", argv[i]) == 0) {
-			if (argc <= i+1) {
-				fprintf(stderr, "missing -c <char>\n");
-				return EXIT_FAILURE;
-			}
-			if (strlen(argv[i+1]) != 1) {
-				fprintf(stderr, "-c '%s' is invalid\n", argv[i+1]);
-				return EXIT_FAILURE;
-			}
+			if (argc <= i+1)
+				die("missing -c <char>\n");
+
+			if (strlen(argv[i+1]) != 1)
+				die("-c '%s' is invalid\n", argv[i+1]);
+
 			delim = argv[i+1][0];
 			i++;
 			continue;
@@ -177,21 +173,17 @@ int main(int argc, char **argv) {
 		// if there is no word in argv
 		sl_str_trim(word, '\n');
 
-		if (word->len == 0) {
+		if (word->len == 0)
 			// if sdin is empty
-			fprintf(stderr, "empty stdin\n");
-			return EXIT_FAILURE;
-		}
+			die("empty stdin\n");
 	}
 
 	if (strindex != -1)
 		// if there is word in argv, overwrite stdin
 		assert(!sl_str_set(word, argv[strindex]));
 
-	if (strindex == -1 && usestdin == true) {
-		fprintf(stderr, "no word in args found\n");
-		return EXIT_FAILURE;
-	}
+	if (strindex == -1 && usestdin == true)
+		die("no word in args found\n");
 
 	filter(word);
 
@@ -201,10 +193,8 @@ int main(int argc, char **argv) {
 	else
 		file = fopen(path->data, "r");
 
-	if (file == NULL) {
-		fprintf(stderr, "could not open FILE '%s'\n", path->data);
-		return EXIT_FAILURE;
-	}
+	if (file == NULL)
+		die("could not open FILE '%s'\n", path->data);
 
 	sl_str *w = sl_str_create_cap(32);
 	assert(w);
