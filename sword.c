@@ -1,9 +1,9 @@
 #include <slib/str.h>
-#include <slib/utils.h>
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
 #include <ctype.h>
+#include <stdarg.h>
 
 #define assert(x) if(!(x)) {fprintf(stderr, "could not assert on line %d file %s\n", __LINE__, __FILE__); exit(EXIT_FAILURE);}
 
@@ -20,6 +20,14 @@ void usage() {
 	fprintf(stderr, "\t-a, replaces non alpha numeric chars with spaces\n");
 	fprintf(stderr, "\t-ts, trims consecutive spaces\n");
 	exit(EXIT_SUCCESS);
+}
+
+void die(const char *fmt, ...) {
+	va_list ap;
+	va_start(ap,fmt);
+	vfprintf(stderr, fmt, ap);
+	va_end(ap);
+	exit(EXIT_FAILURE);
 }
 
 void toalnum(sl_str *str) {
