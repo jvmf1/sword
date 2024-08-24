@@ -1,10 +1,6 @@
 #include <slib/slstr.h>
-#include <slib/slll.h>
-#include <slib/slmap.h>
-#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <termios.h>
 
 void error() {
 	fprintf(stderr, "usage: sword [flags] <word>, tries to find similar words in a file\n\t-d <number>, sets minimum word distance.\n\t-p <path>, sets path to wordlist.\n\t\t/usr/local/share/dict/words.txt by default\n\t-c <delimeter>, char delimeter in wordlist. '\\n' by default\n");
