@@ -1,9 +1,10 @@
 #include <slib/slstr.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdbool.h>
 
 void error() {
-	fprintf(stderr, "usage: sword [flags] <word>, tries to find similar words in a file\n\t-d <number>, sets minimum word distance.\n\t-p <path>, sets path to wordlist.\n\t\t/usr/local/share/dict/words.txt by default\n\t-c <delimeter>, char delimeter in wordlist. '\\n' by default\n");
+	fprintf(stderr, "usage: sword [flags] <word>, tries to find similar words in a file\n\t-d <number>, sets minimum word distance.\n\t-p <path>, sets path to wordlist.\n\t\t/usr/local/share/dict/words.txt by default\n\t-c <delimeter>, char delimeter in wordlist. '\\n' by default\n\t-i, case insensitive\n");
 	exit(1);
 }
 
@@ -14,6 +15,8 @@ int main(int argc, char **argv) {
 		return -1;
 
 	long int minimum=-1;
+	bool casesensitive=true;
+
 
 	char delim='\n';
 	int strindex =-1;
@@ -39,6 +42,9 @@ int main(int argc, char **argv) {
 						error();
 					delim=argv[i+1][0];
 					i++;
+					break;
+				case 'i':
+					casesensitive=false;
 					break;
 				case '\0':
 					error();
@@ -77,6 +83,9 @@ int main(int argc, char **argv) {
 		// if there is no -d flag set default value to 3
 		minimum=3;
 
+	if (casesensitive==false)
+		sl_str_tolower(word);
+
 	FILE *wordlist = fopen(path->data, "r");
 	if (wordlist==NULL)
 		return -1;
@@ -85,11 +94,16 @@ int main(int argc, char **argv) {
 	if (w==NULL)
 		return -1;
 
+
 	while (sl_str_fgetsx(w, wordlist, delim, 32) == 0) {
 		if (w->len > word->len + minimum || word->len > w->len + minimum) {
 			sl_str_clear(w);
 			continue;
 		}
+
+		if (casesensitive==false)
+			sl_str_tolower(w);
+
 		if ((long int)sl_str_distance(w, word) <= minimum) printf("%s\n", w->data);
 		sl_str_clear(w);
 	}

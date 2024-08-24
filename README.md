@@ -14,6 +14,7 @@ usage: sword [flags] <word>, tries to find similar words in a file
 	-p <path>, sets path to wordlist.
 		/usr/local/share/dict/words.txt by default
 	-c <delimeter>, char delimeter in wordlist. '\n' by default
+	-i, case insensitive
 ```
 # examples
 ```sh
