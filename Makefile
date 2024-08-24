@@ -1,6 +1,6 @@
 DESTDIR=/usr/local/bin
 NAME=sword
-CFLAGS=-Wall -Wextra
+CFLAGS=-Wall -Wextra -Werror
 LIBS=-lslib
 CC=cc
 
