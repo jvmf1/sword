@@ -28,6 +28,9 @@ int main(int argc, char **argv) {
 					if (argc<=i+1)
 						error();
 					minimum=atol(argv[i+1]);
+					if (minimum==0)
+						// error on atol or user entered 0
+						error();
 					i++;
 					break;
 				case 'p':
