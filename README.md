@@ -35,5 +35,5 @@ successfully
 # you can also pipe into sword
 echo 'word' | sword
 # or get text from stdin instead
-cat /path/to/wordlist | sword -r world
+cat /path/to/wordlist | sword -r word
 ```
