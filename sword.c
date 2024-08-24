@@ -144,7 +144,7 @@ int main(int argc, char **argv) {
 	if (word == NULL)
 		return -1;
 	
-	if (strindex == -1 && sl_str_fgetsx(word, stdin, EOF, 32) == 0 && usestdin == false) {
+	if (strindex == -1 && sl_str_fgetsx2(word, stdin, EOF, 32) == 0 && usestdin == false) {
 		// if there is no word in argv
 		sl_str_trim(word, '\n');
 
@@ -186,13 +186,14 @@ int main(int argc, char **argv) {
 
 	while (true) {
 
-		status = sl_str_fgetsx(w, file, delim, 32);
+		status = sl_str_fgetsx2(w, file, delim, 32);
 		/* status == 0 : found delim
 		 * status == 1 : found EOF
 		 * stauts == -1 : failed to malloc */
 
 		if (status == -1)
 			return -1;
+
 
 		if (w->len == 0) {
 			if (status == 1)
