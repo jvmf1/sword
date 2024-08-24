@@ -117,4 +117,5 @@ int main(int argc, char **argv) {
 	fclose(file);
 	sl_str_free(w);
 	sl_str_free(word);
+	sl_str_free(path);
 }
