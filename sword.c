@@ -226,12 +226,12 @@ int main(int argc, char **argv) {
 			continue;
 		}
 
+		filter(w);
+
 		if (w->len > word->len + minimum || word->len > w->len + minimum) {
 			sl_str_clear(w);
 			continue;
 		}
-
-		filter(w);
 
 		if (levenshtein_distance(w, word, minimum) <= minimum)
 			printf("%s\n", w->data);
