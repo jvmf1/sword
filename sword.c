@@ -92,12 +92,12 @@ int main(int argc, char **argv) {
 		if (strcmp("-d", argv[i]) == 0) {
 			if (argc <= i+1) {
 				fprintf(stderr, "missing -d <number>\n");
-				usage();
+				return -1;
 			}
 			minimum=atol(argv[i+1]);
 			if (minimum == 0) {
-				fprintf(stderr, "invalid -d <number>\n");
-				usage();
+				fprintf(stderr, "-d '%s' is invalid\n", argv[i+1]);
+				return -1;
 			}
 			i++;
 			continue;
@@ -105,7 +105,7 @@ int main(int argc, char **argv) {
 		if (strcmp("-p", argv[i]) == 0) {
 			if (argc<= i+ 1) {
 				fprintf(stderr, "missing -p <path>\n");
-				usage();
+				return -1;
 			}
 			if (sl_str_set(path, argv[i+1]) != 0)
 				return -1;
@@ -115,11 +115,11 @@ int main(int argc, char **argv) {
 		if (strcmp("-c", argv[i]) == 0) {
 			if (argc <= i+1) {
 				fprintf(stderr, "missing -c <char>\n");
-				usage();
+				return -1;
 			}
 			if (strlen(argv[i+1]) != 1) {
-				fprintf(stderr, "invalid -c <char>\n");
-				usage();
+				fprintf(stderr, "-c '%s' is invalid\n", argv[i+1]);
+				return -1;
 			}
 			delim = argv[i+1][0];
 			i++;
@@ -151,7 +151,7 @@ int main(int argc, char **argv) {
 		if (word->len == 0) {
 			// if sdin is empty
 			fprintf(stderr, "empty stdin\n");
-			usage();
+			return -1;
 		}
 	}
 
@@ -161,7 +161,7 @@ int main(int argc, char **argv) {
 
 	if (strindex == -1 && usestdin == true) {
 		fprintf(stderr, "no word in args found\n");
-		usage();
+		return -1;
 	}
 
 	if (casesensitive == false)
@@ -174,8 +174,7 @@ int main(int argc, char **argv) {
 		file = fopen(path->data, "r");
 
 	if (file == NULL) {
-		fprintf(stderr, "could not open FILE\n");
-		usage();
+		fprintf(stderr, "could not open FILE '%s'\n", path->data);
 		return -1;
 	}
 
