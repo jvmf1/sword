@@ -1,4 +1,4 @@
-#include <slib/slstr.h>
+#include <slib/str.h>
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
