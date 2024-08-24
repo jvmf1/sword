@@ -22,43 +22,35 @@ int main(int argc, char **argv) {
 	int strindex =-1;
 
 	for (int i=1;i<argc;i++) {
-		if (argv[i][0]=='-') {
-			switch (argv[i][1]) {
-				case 'd':
-					if (argc<=i+1)
-						error();
-					minimum=atol(argv[i+1]);
-					if (minimum==0)
-						// error on atol or user entered 0
-						error();
-					i++;
-					break;
-				case 'p':
-					if (argc<=i+1)
-						error();
-					if (sl_str_set(path, argv[i+1])!=0)
-						return -1;
-					i++;
-					break;
-				case 'c':
-					if (argc<=i+1)
-						error();
-					delim=argv[i+1][0];
-					i++;
-					break;
-				case 'i':
-					casesensitive=false;
-					break;
-				case '\0':
-					error();
-					break;
-				default:
-					error();
-
-			}
-		} else {
-			strindex=i;
+		if (strcmp("-d", argv[i])==0) {
+			if (argc<=i+1)
+				error();
+			minimum=atol(argv[i+1]);
+			if (minimum==0)
+				error();
+			i++;
+			continue;
 		}
+		if (strcmp("-p", argv[i])==0) {
+			if (argc<=i+1)
+				error();
+			if (sl_str_set(path, argv[i+1])!=0)
+				return -1;
+			i++;
+			continue;
+		}
+		if (strcmp("-c", argv[i])==0) {
+			if (argc<=i+1)
+				error();
+			delim=argv[i+1][0];
+			i++;
+			continue;
+		}
+		if (strcmp("-i", argv[i])==0) {
+			casesensitive=false;
+			continue;
+		}
+		strindex=i;
 	}
 
 	sl_str *word = sl_str_create_cap(64);
