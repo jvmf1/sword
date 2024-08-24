@@ -2,8 +2,11 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
+#include <ctype.h>
 
 #define assert(x) if(!(x)) {fprintf(stderr, "could not assert on line %d file %s\n", __LINE__, __FILE__); exit(EXIT_FAILURE);}
+
+bool lowercase, trimspace, alnum;
 
 void usage() {
 	fprintf(stderr, "usage: sword [flags] <word>, tries to find similar words in a file\n");
@@ -13,7 +16,16 @@ void usage() {
 	fprintf(stderr, "\t-c <delimeter>, char delimeter in file. '\\n' by default\n");
 	fprintf(stderr, "\t-i, case insensitive\n");
 	fprintf(stderr, "\t-r, get text from stdin\n");
+	fprintf(stderr, "\t-a, replaces non alpha numeric chars with spaces\n");
+	fprintf(stderr, "\t-ts, trims consecutive spaces\n");
 	exit(EXIT_SUCCESS);
+}
+
+void toalnum(sl_str *str) {
+	for (size_t i = 0; i < str->len; i++) {
+		if (!isalnum(str->data[i]))
+			str->data[i] = ' ';
+	}
 }
 
 bool is_diagonal(size_t i, size_t j, size_t len, size_t len2) {
@@ -77,6 +89,14 @@ size_t levenshtein_distance(sl_str *str, sl_str * str2, size_t max){
 	return matrix[str->len][str2->len];
 }
 
+void filter(sl_str *str) {
+	if (alnum)
+		toalnum(str);
+	if (lowercase)
+		sl_str_tolower(str);
+	if (trimspace)
+		sl_str_trim_all(str, ' ');
+}
 
 int main(int argc, char **argv) {
 
@@ -84,8 +104,10 @@ int main(int argc, char **argv) {
 	assert(path);
 
 	unsigned long int minimum = 3;
-	bool casesensitive = true;
+	lowercase = false;
 	bool usestdin = false;
+	trimspace = false;
+	alnum = false;
 	char delim = '\n';
 	int strindex = -1;
 
@@ -126,11 +148,19 @@ int main(int argc, char **argv) {
 			continue;
 		}
 		if (strcmp("-i", argv[i]) == 0) {
-			casesensitive = false;
+			lowercase = true;
+			continue;
+		}
+		if (strcmp("-a", argv[i]) == 0) {
+			alnum = true;
 			continue;
 		}
 		if (strcmp("-r", argv[i]) == 0) {
 			usestdin = true;
+			continue;
+		}
+		if (strcmp("-ts", argv[i]) == 0) {
+			trimspace = true;
 			continue;
 		}
 		if (strcmp("-h", argv[i]) == 0) {
@@ -163,8 +193,7 @@ int main(int argc, char **argv) {
 		return EXIT_FAILURE;
 	}
 
-	if (casesensitive == false)
-		sl_str_tolower(word);
+	filter(word);
 
 	FILE *file;
 	if (usestdin == true)
@@ -202,8 +231,7 @@ int main(int argc, char **argv) {
 			continue;
 		}
 
-		if (casesensitive == false)
-			sl_str_tolower(w);
+		filter(w);
 
 		if (levenshtein_distance(w, word, minimum) <= minimum)
 			printf("%s\n", w->data);
