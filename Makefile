@@ -7,7 +7,7 @@ CC=cc
 all: $(NAME)
 
 $(NAME).o: $(NAME).c
-	$(CC) $(CFLAGS) $(LIBS) $(NAME).c -c
+	$(CC) $(CFLAGS) $(NAME).c -c
 
 $(NAME): $(NAME).o
 	$(CC) $(LIBS) $(NAME).o -o $@
