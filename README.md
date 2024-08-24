@@ -31,11 +31,10 @@ unsuccessful
 unsuccessfully
 # you can set a distance with -d flag
 $ sword -p /path/to/wordlist -d 1 successfull
-succesful
 successful
 successfully
 # you can also pipe into sword
-echo 'word' | sword
+$ echo 'word' | sword
 # or get text from stdin instead
-cat /path/to/wordlist | sword -r word
+$ cat /path/to/wordlist | sword -r word
 ```
