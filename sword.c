@@ -86,7 +86,7 @@ int main(int argc, char **argv) {
 		return -1;
 
 	while (sl_str_fgetsx(w, wordlist, delim, 32) == 0) {
-		if (w->len > word->len + minimum) {
+		if (w->len > word->len + minimum || word->len > w->len + minimum) {
 			sl_str_clear(w);
 			continue;
 		}
