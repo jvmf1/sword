@@ -8,6 +8,68 @@ void usage() {
 	exit(1);
 }
 
+bool is_diagonal(size_t i, size_t j, size_t len, size_t len2) {
+	if (i == j)
+		return true;
+	size_t smaller = len;
+	size_t bigger = len;
+	if (len2 < smaller)
+		smaller = len2;
+	if (len2 > bigger)
+		bigger = len2;
+
+	if (smaller == len) {
+		if (i == smaller && j >= smaller)
+			return true;
+		return false;
+	} else {
+		if ( j== smaller && i >= smaller)
+			return true;
+		return false;
+	}
+}
+
+size_t levenshtein_distance(sl_str *str, sl_str * str2, size_t max){
+	size_t matrix[str->len + 1][str2->len + 1];
+	size_t i,j;
+	size_t delete, insert, substitute, minimum;
+	for (i = 0; i <= str->len; i++) {
+		matrix[i][0] = i;
+	}
+	for (i = 0; i <= str2->len; i++) {
+		matrix[0][i] = i;
+	}
+	for (i = 1; i <= str->len; i++) {
+
+		for (j = 1; j <= str2->len; j++) {
+
+			if (str->data[i-1] == str2->data[j-1]) {
+				matrix[i][j] = matrix[i-1][j-1];
+			}
+			else {
+
+				delete = matrix[i-1][j] + 1;
+				insert = matrix[i][j-1] + 1;
+				substitute = matrix[i-1][j-1] + 1;
+				minimum = delete;
+				if (insert < minimum) {
+					minimum = insert;
+				}
+				if (substitute < minimum) {
+					minimum = substitute;
+				}
+				matrix[i][j] = minimum;
+			}
+//			if (is_diagonal(i,j,str->len,str2->len)) {
+//				if (matrix[i][j]>max)
+//					return max+1;
+//			}
+		}
+	}
+	return matrix[str->len][str2->len];
+}
+
+
 int main(int argc, char **argv) {
 
 	sl_str *path = sl_str_create("/usr/local/share/dict/words.txt");
@@ -127,8 +189,9 @@ int main(int argc, char **argv) {
 		if (casesensitive == false)
 			sl_str_tolower(w);
 
-		if (sl_str_distance(w, word) <= minimum)
+		if (levenshtein_distance(w, word, minimum) <= minimum)
 			printf("%s\n", w->data);
+
 		sl_str_clear(w);
 
 	}
