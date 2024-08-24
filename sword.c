@@ -86,6 +86,10 @@ int main(int argc, char **argv) {
 		return -1;
 
 	while (sl_str_fgetsx(w, wordlist, delim, 32) == 0) {
+		if (w->len > word->len + minimum) {
+			sl_str_clear(w);
+			continue;
+		}
 		if ((long int)sl_str_distance(w, word) <= minimum) printf("%s\n", w->data);
 		sl_str_clear(w);
 	}
