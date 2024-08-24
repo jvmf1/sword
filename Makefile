@@ -2,14 +2,15 @@ DESTDIR=/usr/local/bin
 NAME=sword
 CFLAGS=-Wall -Wextra
 LIBS=-lslib
+CC=cc
 
 all: $(NAME)
 
 $(NAME).o: $(NAME).c
-	cc $(CFLAGS) $(LIBS) $(NAME).c -c
+	$(CC) $(CFLAGS) $(LIBS) $(NAME).c -c
 
 $(NAME): $(NAME).o
-	cc $(LIBS) $(NAME).o -o $@ 
+	$(CC) $(LIBS) $(NAME).o -o $@
 
 install: $(NAME)
 	mkdir -p $(DESTDIR)
