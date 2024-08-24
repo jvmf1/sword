@@ -11,9 +11,9 @@ sudo make install
 ```
 usage: sword [flags] <word>, tries to find similar words in a file
 	-d <number>, sets minimum word distance. 3 by default
-	-p <path>, sets path to wordlist.
+	-p <path>, sets path to file.
 		/usr/local/share/dict/words.txt by default
-	-c <delimeter>, char delimeter in wordlist. '\n' by default
+	-c <delimeter>, char delimeter in file. '\n' by default
 	-i, case insensitive
 ```
 # examples
