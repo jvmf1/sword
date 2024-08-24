@@ -60,10 +60,10 @@ size_t levenshtein_distance(sl_str *str, sl_str * str2, size_t max){
 				}
 				matrix[i][j] = minimum;
 			}
-//			if (is_diagonal(i,j,str->len,str2->len)) {
-//				if (matrix[i][j]>max)
-//					return max+1;
-//			}
+			if (is_diagonal(i,j,str->len,str2->len)) {
+				if (matrix[i][j]>max)
+					return max+1;
+			}
 		}
 	}
 	return matrix[str->len][str2->len];
