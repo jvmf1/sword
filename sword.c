@@ -141,6 +141,7 @@ int main(int argc, char **argv) {
 	if (strindex == -1 && sl_str_fgetsx(word, stdin, EOF, 32) == 0 && usestdin == false) {
 		// if there is no word in argv
 		sl_str_trim(word, '\n');
+
 		if (word->len == 0) {
 			// if sdin is empty
 			fprintf(stderr, "empty stdin\n");
@@ -176,10 +177,23 @@ int main(int argc, char **argv) {
 	if (w == NULL)
 		return -1;
 
-	while (sl_str_fgetsx(w, file, delim, 32) == 0) {
+	int status;
 
-		if (w->len == 0)
+	while (true) {
+
+		status = sl_str_fgetsx(w, file, delim, 32);
+		/* status == 0 : found delim
+		 * status == 1 : found EOF
+		 * stauts == -1 : failed to malloc */
+
+		if (status == -1)
+			return -1;
+
+		if (w->len == 0) {
+			if (status == 1)
+				break;
 			continue;
+		}
 
 		if (w->len > word->len + minimum || word->len > w->len + minimum) {
 			sl_str_clear(w);
@@ -191,6 +205,9 @@ int main(int argc, char **argv) {
 
 		if (levenshtein_distance(w, word, minimum) <= minimum)
 			printf("%s\n", w->data);
+
+		if (status == 1)
+			break;
 
 		sl_str_clear(w);
 
