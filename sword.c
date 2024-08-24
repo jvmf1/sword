@@ -115,6 +115,10 @@ int main(int argc, char **argv) {
 		return -1;
 
 	while (sl_str_fgetsx(w, file, delim, 32) == 0) {
+
+		if (w->len == 0)
+			continue;
+
 		if (w->len > word->len + minimum || word->len > w->len + minimum) {
 			sl_str_clear(w);
 			continue;
@@ -126,7 +130,9 @@ int main(int argc, char **argv) {
 		if (sl_str_distance(w, word) <= minimum)
 			printf("%s\n", w->data);
 		sl_str_clear(w);
+
 	}
+
 	fclose(file);
 	sl_str_free(w);
 	sl_str_free(word);
