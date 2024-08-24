@@ -69,7 +69,7 @@ int main(int argc, char **argv) {
 		strindex=i;
 	}
 
-	sl_str *word = sl_str_create_cap(64);
+	sl_str *word = sl_str_create_cap(32);
 	if (word==NULL)
 		return -1;
 	
@@ -90,8 +90,8 @@ int main(int argc, char **argv) {
 	if (casesensitive==false)
 		sl_str_tolower(word);
 
-	FILE *wordlist = fopen(path->data, "r");
-	if (wordlist==NULL) {
+	FILE *file= fopen(path->data, "r");
+	if (file==NULL) {
 		fprintf(stderr, "could not open FILE\n");
 		usage();
 		return -1;
@@ -101,7 +101,7 @@ int main(int argc, char **argv) {
 	if (w==NULL)
 		return -1;
 
-	while (sl_str_fgetsx(w, wordlist, delim, 32) == 0) {
+	while (sl_str_fgetsx(w, file, delim, 32) == 0) {
 		if (w->len > word->len + minimum || word->len > w->len + minimum) {
 			sl_str_clear(w);
 			continue;
@@ -114,7 +114,7 @@ int main(int argc, char **argv) {
 			printf("%s\n", w->data);
 		sl_str_clear(w);
 	}
-	fclose(wordlist);
+	fclose(file);
 	sl_str_free(w);
 	sl_str_free(word);
 }
