@@ -12,7 +12,7 @@ bool lowercase, trimspace, alnum;
 void usage() {
 	fprintf(stderr, "usage: sword [flags] <word>, tries to find similar words in a file\n");
 	fprintf(stderr, "\t-d <number>, sets minimum word distance. 3 by default\n");
-	fprintf(stderr, "\t-p <path>, sets path to file.\n");
+	fprintf(stderr, "\t-f <path>, sets path to file.\n");
 	fprintf(stderr, "\t\t/usr/local/share/dict/words.txt by default\n");
 	fprintf(stderr, "\t-c <delimeter>, char delimeter in file. '\\n' by default\n");
 	fprintf(stderr, "\t-i, case insensitive\n");
@@ -132,9 +132,9 @@ int main(int argc, char **argv) {
 			i++;
 			continue;
 		}
-		if (strcmp("-p", argv[i]) == 0) {
+		if (strcmp("-f", argv[i]) == 0) {
 			if (argc<= i+ 1)
-				die("missing -p <path>\n");
+				die("missing -f <path>\n");
 
 			assert(!sl_str_set(path, argv[i+1]));
 			i++;
