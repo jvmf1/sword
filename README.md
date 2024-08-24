@@ -15,6 +15,7 @@ usage: sword [flags] <word>, tries to find similar words in a file
 		/usr/local/share/dict/words.txt by default
 	-c <delimeter>, char delimeter in file. '\n' by default
 	-i, case insensitive
+	-r, get text from stdin
 ```
 # examples
 ```sh
@@ -33,4 +34,6 @@ successful
 successfully
 # you can also pipe into sword
 echo 'word' | sword
+# or get text from stdin instead
+cat /path/to/wordlist | sword -r world
 ```
