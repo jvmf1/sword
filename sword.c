@@ -29,7 +29,7 @@ int main(int argc, char **argv) {
 			}
 			minimum=atol(argv[i+1]);
 			if (minimum==0) {
-				fprintf(stderr, "invalid -d number\n");
+				fprintf(stderr, "invalid -d <number>\n");
 				usage();
 			}
 			i++;
@@ -73,7 +73,7 @@ int main(int argc, char **argv) {
 	if (word==NULL)
 		return -1;
 	
-	if (strindex==-1 && sl_str_fgetsx(word, stdin, EOF, 32)!=-1) {
+	if (strindex==-1 && sl_str_fgetsx(word, stdin, EOF, 32)==0) {
 		// if there is no word in argv
 		sl_str_trim(word, '\n');
 		if (word->len==0) {
