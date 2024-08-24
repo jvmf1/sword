@@ -4,7 +4,7 @@
 #include <stdbool.h>
 
 void usage() {
-	fprintf(stderr, "usage: sword [flags] <word>, tries to find similar words in a file\n\t-d <number>, sets minimum word distance. 3 by default\n\t-p <path>, sets path to wordlist.\n\t\t/usr/local/share/dict/words.txt by default\n\t-c <delimeter>, char delimeter in wordlist. '\\n' by default\n\t-i, case insensitive\n");
+	fprintf(stderr, "usage: sword [flags] <word>, tries to find similar words in a file\n\t-d <number>, sets minimum word distance. 3 by default\n\t-p <path>, sets path to file.\n\t\t/usr/local/share/dict/words.txt by default\n\t-c <delimeter>, char delimeter in file. '\\n' by default\n\t-i, case insensitive\n");
 	exit(1);
 }
 

@@ -1,5 +1,5 @@
 # sword
-tool for finding similar word in a wordlist
+tool for finding similar word in a file
 # install
 install [jvmf1/slib](https://github.com/jvmf1/slib)
 ```
